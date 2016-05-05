@@ -11,8 +11,28 @@ public class GameLogic : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		SocketHandler socket = new SocketHandler ();
+		SocketHandler socket = new SocketHandler (this);
 	}
+
+    public void moveOpponent(Vector3 newPosition, int ballIndex,Vector3 newVelocity)
+    {
+        switch (ballIndex)
+        {
+            case 1:
+                ball1.transform.position = newPosition;
+                ball1.GetComponent<Rigidbody>().velocity = newVelocity;
+                break;
+            case 2:
+                ball2.transform.position = newPosition;
+                ball2.GetComponent<Rigidbody>().velocity = newVelocity;
+                break;
+            case 3:
+                ball3.transform.position =newPosition;
+                ball3.GetComponent<Rigidbody>().velocity = newVelocity;
+                break;
+
+        }
+    }
 	
 	// Update is called once per frame
 	void Update () {
