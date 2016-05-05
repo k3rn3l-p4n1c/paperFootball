@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 
 public class SocketHandler {
-	const string HOST = "192.168.1.36";
+	const string HOST = "172.17.10.6";
 
 	private Socket _clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 	private byte[] _recieveBuffer = new byte[8142];
@@ -28,7 +28,7 @@ public class SocketHandler {
 			int numberOfByte = _clientSocket.Receive(_recieveBuffer);
 			bytes = new byte[numberOfByte];
 			Buffer.BlockCopy(_recieveBuffer, 0, bytes, 0, numberOfByte);
-			Debug.Log(BasicEvent.Deserialize(bytes));
+			Debug.Log(Response.Deserialize(bytes));
 		}
 		catch (SocketException ex)
 		{
