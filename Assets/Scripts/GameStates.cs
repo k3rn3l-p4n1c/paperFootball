@@ -3,8 +3,8 @@ using UnityEngine;
 
 
 public class GameStateMachine{
-	//private State mCurrentState = State.RESETTING;
-    private State mCurrentState = State.OPP_TURN;
+	private State mCurrentState = State.RESETTING;
+   // private State mCurrentState = State.OPP_TURN;
 	public State Current(){
 		return mCurrentState;
 	}

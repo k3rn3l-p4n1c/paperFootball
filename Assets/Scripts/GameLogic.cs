@@ -4,14 +4,15 @@ using System.Collections;
 public class GameLogic : MonoBehaviour {
 	const int RESET_SPEED = 6;
 
-	public GameObject ball1,ball2,ball3;
+	public GameObject ball1,ball2,ball3,leftGoalKeeper,rightGoalKeeper;
+
 
 	public GameStateMachine StateMachine = new GameStateMachine ();
 	public string ShootingBallName;
 
 	// Use this for initialization
 	void Start () {
-		SocketHandler socket = new SocketHandler (this);
+		//SocketHandler socket = new SocketHandler (this);
 	}
 
     public void moveOpponent(Vector3 newPosition, int ballIndex,Vector3 newVelocity)
@@ -42,6 +43,10 @@ public class GameLogic : MonoBehaviour {
 				StateMachine.BallPass ();
 			break;
 		case GameStateMachine.State.RESETTING:
+            
+                leftGoalKeeper.SetActive(false);
+                rightGoalKeeper.SetActive(true);
+            
 			ball1.transform.position = Vector2.MoveTowards (ball1.transform.position, ResetPoints.i ().pos1, RESET_SPEED * Time.deltaTime);
 			ball2.transform.position = Vector2.MoveTowards (ball2.transform.position, ResetPoints.i ().pos2, RESET_SPEED * Time.deltaTime);
 			ball3.transform.position = Vector2.MoveTowards (ball3.transform.position, ResetPoints.i ().pos3, RESET_SPEED * Time.deltaTime);
@@ -50,9 +55,15 @@ public class GameLogic : MonoBehaviour {
 			   && (ball3.transform.position - ResetPoints.i ().pos3).magnitude < 0.5f)
 				StateMachine.Reach ();
 			break;
+        case GameStateMachine.State.OPP_TURN:
+                leftGoalKeeper.SetActive(true);
+                rightGoalKeeper.SetActive(false);
+                break;
+
 		}
 		if (!checkBallMoving ())
 			StateMachine.Stop ();
+        
 		//Debug.Log (checkBallMoving ());
 	}
 
