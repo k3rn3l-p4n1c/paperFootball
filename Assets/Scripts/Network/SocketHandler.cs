@@ -60,10 +60,13 @@ public class SocketHandler {
 	}
 
 	public void Send(string body){
+		EventWrapper newEvent = new EventWrapper ();
 		BasicEvent basicEvent = new BasicEvent ();
 		basicEvent.Title = "Ball";
 		basicEvent.Body = body;
-		SendData (BasicEvent.SerializeToBytes (basicEvent));
+		newEvent.eventType = EventWrapper.EventType.BasicEvent;
+		newEvent.BasicEvent = basicEvent;
+		SendData (EventWrapper.SerializeToBytes (newEvent));
 	}
 
 	private void SendData(byte[] data)
@@ -84,10 +87,13 @@ public class SocketHandler {
 		byte[] recData = new byte[recieved];
 		Buffer.BlockCopy(_recieveBuffer, 0, recData, 0, recieved);
         
-		string[] serverData = BasicEvent.Deserialize(recData).Body.Split(' ');
+		BasicEvent incommingEvent = EventWrapper.Deserialize (recData).BasicEvent;
+		string[] serverData = incommingEvent.Body.Split(' ');
 		string head = serverData [0].Trim ();
-
-		if (head.Contains ("Ball")) {
+		Debug.Log (incommingEvent.Body);
+		Debug.Log (incommingEvent.Title);
+		Debug.Log (head);
+		if (head.Equals ("Ball")) {
 			worldState.update( new Vector3(Int32.Parse(serverData[1]), Int32.Parse(serverData[2])),
 				new Vector3(Int32.Parse(serverData[3]), Int32.Parse(serverData[4])),
 				new Vector3(Int32.Parse(serverData[5]), Int32.Parse(serverData[6])),
