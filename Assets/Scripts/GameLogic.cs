@@ -3,36 +3,32 @@ using System.Collections;
 
 public class GameLogic : MonoBehaviour {
 	const int RESET_SPEED = 6;
+	const float SEND_EVENT_DELAY = 1.0f;
 
 	public GameObject ball1,ball2,ball3,leftGoalKeeper,rightGoalKeeper;
-
-
 	public GameStateMachine StateMachine = new GameStateMachine ();
 	public string ShootingBallName;
 
+	private float lastSendEventTime = 0.0f;
+	private OutterWorldState outterWorldState;
+	private SocketHandler socket;
+
 	// Use this for initialization
 	void Start () {
-		//SocketHandler socket = new SocketHandler (this);
+		outterWorldState = new OutterWorldState ();
+		socket = new SocketHandler (outterWorldState);
 	}
 
-    public void moveOpponent(Vector3 newPosition, int ballIndex,Vector3 newVelocity)
+	private void updateOppenent()
     {
-        switch (ballIndex)
-        {
-            case 1:
-                ball1.transform.position = newPosition;
-                ball1.GetComponent<Rigidbody>().velocity = newVelocity;
-                break;
-            case 2:
-                ball2.transform.position = newPosition;
-                ball2.GetComponent<Rigidbody>().velocity = newVelocity;
-                break;
-            case 3:
-                ball3.transform.position =newPosition;
-                ball3.GetComponent<Rigidbody>().velocity = newVelocity;
-                break;
-
-        }
+		Debug.Log ("Debug");
+		outterWorldState.Read ();
+		ball1.transform.position = outterWorldState.ball1Pos;
+		ball1.GetComponent<Rigidbody2D>().velocity = outterWorldState.ball1Vel;
+		ball2.transform.position = outterWorldState.ball2Pos;
+		ball2.GetComponent<Rigidbody2D>().velocity = outterWorldState.ball2Vel;
+		ball3.transform.position =outterWorldState.ball3Pos;
+		ball3.GetComponent<Rigidbody2D>().velocity = outterWorldState.ball3Vel;
     }
 	
 	// Update is called once per frame
@@ -63,6 +59,22 @@ public class GameLogic : MonoBehaviour {
 		}
 		if (!checkBallMoving ())
 			StateMachine.Stop ();
+
+		//send to server
+		if (StateMachine.Current () != GameStateMachine.State.OPP_TURN) {
+			if (Time.time > lastSendEventTime + SEND_EVENT_DELAY) {
+				lastSendEventTime = Time.time;
+				socket.Send (string.Format("Ball {0} {1} {2} {3} {4} {5} {6} {7} {9} {10} {11}"
+					,ball1.transform.position.x,ball1.transform.position.y, ball1.GetComponent<Rigidbody2D>().velocity.x,ball1.GetComponent<Rigidbody2D>().velocity.y
+					,ball2.transform.position.x,ball2.transform.position.y, ball2.GetComponent<Rigidbody2D>().velocity.x,ball2.GetComponent<Rigidbody2D>().velocity.y
+					,ball3.transform.position.x,ball3.transform.position.y, ball3.GetComponent<Rigidbody2D>().velocity.x,ball3.GetComponent<Rigidbody2D>().velocity.y));
+			}
+		}
+		// receive from server
+		else{
+			if (outterWorldState.IsReady () ) 
+				updateOppenent ();
+		}
         
 		//Debug.Log (checkBallMoving ());
 	}

@@ -10,16 +10,15 @@ using System.Collections.Generic;
 
 public class SocketHandler {
 
-	const string HOST = "172.17.10.6";
+	const string HOST = "127.0.0.1";
 
-    GameLogic logic;
+	OutterWorldState worldState;
 	private Socket _clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 	private byte[] _recieveBuffer = new byte[8142];
 
-	public SocketHandler(GameLogic gl){
-        logic = gl;
+	public SocketHandler(OutterWorldState ws){
+		worldState = ws;
         SetupServer ();
-        
 	}
 
   
@@ -60,6 +59,13 @@ public class SocketHandler {
 		_clientSocket.BeginReceive(_recieveBuffer, 0, _recieveBuffer.Length, SocketFlags.None, new AsyncCallback(ReceiveCallback), null);
 	}
 
+	public void Send(string body){
+		BasicEvent basicEvent = new BasicEvent ();
+		basicEvent.Title = "Ball";
+		basicEvent.Body = body;
+		SendData (BasicEvent.SerializeToBytes (basicEvent));
+	}
+
 	private void SendData(byte[] data)
 	{
 		_clientSocket.Send(data);
@@ -67,7 +73,6 @@ public class SocketHandler {
 
 	private void ReceiveCallback(IAsyncResult AR)
 	{
-        Debug.Log("in async:");
 		//Check how much bytes are recieved and call EndRecieve to finalize handshake
 		int recieved = _clientSocket.EndReceive(AR);
 
@@ -78,46 +83,18 @@ public class SocketHandler {
         //now  all Data is in recData
 		byte[] recData = new byte[recieved];
 		Buffer.BlockCopy(_recieveBuffer, 0, recData, 0, recieved);
+        
+		string[] serverData = BasicEvent.Deserialize(recData).Body.Split(' ');
+		string head = serverData [0].Trim ();
 
-        //parsing
-        float newX, newY,newVelocityX,newVelocityY;
-        int ballIndex;
-        Debug.Log("Server Info title:" + BasicEvent.Deserialize(recData).Title);
-        Debug.Log("Server Info Body:" + BasicEvent.Deserialize(recData).Body);
-        string[] serverData = BasicEvent.Deserialize(recData).Body.Split(' ');
-        for (int i = 0; i < serverData[0].Length; i++)
-        {
-            Debug.Log(serverData[0].ToCharArray()[i]);
-        }
-            Debug.Log("Server Info data 0 :" + serverData[0].Length.ToString());
-        Debug.Log("S: " + (serverData[0].Equals("  server  Ball")));
-        if (serverData[0].Equals("serverData"))
-        {
-            ballIndex = Int32.Parse(serverData[1]);
-            newX = Int32.Parse(serverData[2]);
-            newY = Int32.Parse(serverData[3]);
-            newVelocityX = Int32.Parse(serverData[4]);
-            newVelocityY = Int32.Parse(serverData[5]);
-            Vector3 veloVec = new Vector3(newVelocityX, newVelocityY);
-            Vector3 posVec = new Vector3(newX, newY);
-            logic.moveOpponent(posVec, ballIndex, veloVec);
-        }
-        switch (serverData[0])
-        {
-            case "  server  Ball":
-                Debug.Log("in case");
-                ballIndex = Int32.Parse(serverData[1]);
-                newX = Int32.Parse(serverData[2]);
-                newY = Int32.Parse(serverData[3]);
-                newVelocityX = Int32.Parse(serverData[4]);
-                newVelocityY = Int32.Parse(serverData[5]);
-                Vector3 veloVec = new Vector3(newVelocityX, newVelocityY);
-                Vector3 posVec = new Vector3(newX, newY);
-                logic.moveOpponent(posVec, ballIndex, veloVec);
-
-                break;
-
-        }
+		if (head.Contains ("Ball")) {
+			worldState.update( new Vector3(Int32.Parse(serverData[1]), Int32.Parse(serverData[2])),
+				new Vector3(Int32.Parse(serverData[3]), Int32.Parse(serverData[4])),
+				new Vector3(Int32.Parse(serverData[5]), Int32.Parse(serverData[6])),
+				new Vector3(Int32.Parse(serverData[7]), Int32.Parse(serverData[8])),
+				new Vector3(Int32.Parse(serverData[9]), Int32.Parse(serverData[10])),
+				new Vector3(Int32.Parse(serverData[11]), Int32.Parse(serverData[12])));
+		}
 
 		//Start receiving again
 		_clientSocket.BeginReceive(_recieveBuffer, 0, _recieveBuffer.Length, SocketFlags.None, new AsyncCallback(ReceiveCallback), null);
