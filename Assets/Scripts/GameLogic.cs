@@ -3,7 +3,7 @@ using System.Collections;
 
 public class GameLogic : MonoBehaviour {
 	const int RESET_SPEED = 6;
-	const float SEND_EVENT_DELAY = 1.0f;
+	const float SEND_EVENT_DELAY = 0.0f;
 
 	public GameObject ball1,ball2,ball3,leftGoalKeeper,rightGoalKeeper;
 	public GameStateMachine StateMachine = GameStateMachine.i();
@@ -55,18 +55,22 @@ public class GameLogic : MonoBehaviour {
 		rightGoalKeeper.SetActive (StateMachine.Current() != GameStateMachine.State.START && StateMachine.Current() != GameStateMachine.State.OPP_TURN);
 			
 
-		if (!checkBallMoving ())
+		if (!checkBallMoving ()) {
+			if (StateMachine.Current () == GameStateMachine.State.SHOOTING) {
+				socket.Send (outterWorldState.turn.ToString(), "ChTurn");
+			}
 			StateMachine.Stop ();
+		}
 
 		//send to server
 		if (StateMachine.Current () != GameStateMachine.State.OPP_TURN) {
 			if (Time.time > lastSendEventTime + SEND_EVENT_DELAY) {
 				lastSendEventTime = Time.time;
-				socket.Send (string.Format("Ball {0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10} {11}"
+				socket.Send (outterWorldState.turn.ToString() ,string.Format("Ball {0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10} {11}"
 					,ball1.transform.position.x,ball1.transform.position.y, ball1.GetComponent<Rigidbody2D>().velocity.x,ball1.GetComponent<Rigidbody2D>().velocity.y
 					,ball2.transform.position.x,ball2.transform.position.y, ball2.GetComponent<Rigidbody2D>().velocity.x,ball2.GetComponent<Rigidbody2D>().velocity.y
 					,ball3.transform.position.x,ball3.transform.position.y, ball3.GetComponent<Rigidbody2D>().velocity.x,ball3.GetComponent<Rigidbody2D>().velocity.y));
-			}
+			} 
 		}
 		// receive from server
 		else{
@@ -112,7 +116,6 @@ public class GameLogic : MonoBehaviour {
 			pos1 = new Vector3(Random.Range (-6, 0), Random.Range (-3, 3), 0);
 			pos2 = new Vector3(Random.Range (-6, 0), Random.Range (-3, 3), 0);
 			pos3 = new Vector3(Random.Range (-6, 0), Random.Range (-3, 3), 0);
-
 		}
 		static public void clear(){
 			instance = null;
