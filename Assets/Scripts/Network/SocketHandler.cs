@@ -21,6 +21,7 @@ public class SocketHandler {
 		worldState = ws;
         SetupServer ();
 		gameLogic = gl;
+		Debug.Log (ws.ToString ());
 	}
 
   
@@ -81,6 +82,7 @@ public class SocketHandler {
 		//Check how much bytes are recieved and call EndRecieve to finalize handshake
 		int recieved = _clientSocket.EndReceive(AR);
 
+		Debug.Log ("SUCKIT");
 		if (recieved <= 0)
 			return;
 
@@ -95,14 +97,19 @@ public class SocketHandler {
 		Debug.Log (incommingEvent.Body);
 		Debug.Log (incommingEvent.Title);
 		Debug.Log (head);
+		Debug.Log (worldState.ToString ());
 		switch(head) {
 		case "Ball":
-			worldState.update (new Vector3 (Int32.Parse (serverData [1]), Int32.Parse (serverData [2])),
+			Debug.Log ("Ball pos received: "+serverData.Length.ToString());
+			worldState.update (
+				new Vector3 (Int32.Parse (serverData [1]), Int32.Parse (serverData [2])),
 				new Vector3 (Int32.Parse (serverData [3]), Int32.Parse (serverData [4])),
 				new Vector3 (Int32.Parse (serverData [5]), Int32.Parse (serverData [6])),
 				new Vector3 (Int32.Parse (serverData [7]), Int32.Parse (serverData [8])),
 				new Vector3 (Int32.Parse (serverData [9]), Int32.Parse (serverData [10])),
 				new Vector3 (Int32.Parse (serverData [11]), Int32.Parse (serverData [12])));
+
+			Debug.Log ("Ball pos finished");
 			break;
 		case "Turn":
 			Debug.Log ("TURRRRN");

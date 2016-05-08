@@ -62,7 +62,7 @@ public class GameLogic : MonoBehaviour {
 		if (StateMachine.Current () != GameStateMachine.State.OPP_TURN) {
 			if (Time.time > lastSendEventTime + SEND_EVENT_DELAY) {
 				lastSendEventTime = Time.time;
-				socket.Send (string.Format("Ball {0} {1} {2} {3} {4} {5} {6} {7} {9} {10} {11}"
+				socket.Send (string.Format("Ball {0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10} {11}"
 					,ball1.transform.position.x,ball1.transform.position.y, ball1.GetComponent<Rigidbody2D>().velocity.x,ball1.GetComponent<Rigidbody2D>().velocity.y
 					,ball2.transform.position.x,ball2.transform.position.y, ball2.GetComponent<Rigidbody2D>().velocity.x,ball2.GetComponent<Rigidbody2D>().velocity.y
 					,ball3.transform.position.x,ball3.transform.position.y, ball3.GetComponent<Rigidbody2D>().velocity.x,ball3.GetComponent<Rigidbody2D>().velocity.y));
