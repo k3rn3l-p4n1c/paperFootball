@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 public class SocketHandler {
 
-	const string HOST = "127.0.0.1";
+	const string HOST = "172.17.10.62";
 
 	OutterWorldState worldState;
 	GameLogic gameLogic;
