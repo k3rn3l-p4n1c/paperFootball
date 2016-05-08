@@ -45,7 +45,7 @@ public class BallLogic : MonoBehaviour {
 				gameLogic.StateMachine.Ignore ();
 				Debug.Log ("Ignore shoot");
 			} else {
-				rb.AddForce (shoot, ForceMode2D.Force);
+				rb.AddForce (shoot*2, ForceMode2D.Force);
 				gameLogic.StateMachine.Shoot ();
 				//audio.Play ();
 			}

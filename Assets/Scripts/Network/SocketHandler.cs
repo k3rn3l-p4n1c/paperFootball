@@ -62,10 +62,10 @@ public class SocketHandler {
 		_clientSocket.BeginReceive(_recieveBuffer, 0, _recieveBuffer.Length, SocketFlags.None, new AsyncCallback(ReceiveCallback), null);
 	}
 
-	public void Send(string body){
+	public void Send(string title,string body){
 		EventWrapper newEvent = new EventWrapper ();
 		BasicEvent basicEvent = new BasicEvent ();
-		basicEvent.Title = "Ball";
+		basicEvent.Title = title;
 		basicEvent.Body = body;
 		newEvent.eventType = EventWrapper.EventType.BasicEvent;
 		newEvent.BasicEvent = basicEvent;
@@ -82,7 +82,6 @@ public class SocketHandler {
 		//Check how much bytes are recieved and call EndRecieve to finalize handshake
 		int recieved = _clientSocket.EndReceive(AR);
 
-		Debug.Log ("SUCKIT");
 		if (recieved <= 0)
 			return;
 
@@ -94,27 +93,26 @@ public class SocketHandler {
 		BasicEvent incommingEvent = EventWrapper.Deserialize (recData).BasicEvent;
 		string[] serverData = incommingEvent.Body.Split(' ');
 		string head = serverData [0].Trim ();
-		Debug.Log (incommingEvent.Body);
-		Debug.Log (incommingEvent.Title);
+		Debug.Log (incommingEvent.Title + " - " + worldState.turn);
 		Debug.Log (head);
 		Debug.Log (worldState.ToString ());
 		switch(head) {
 		case "Ball":
-			Debug.Log ("Ball pos received: "+serverData.Length.ToString());
 			worldState.update (
-				new Vector3 (Int32.Parse (serverData [1]), Int32.Parse (serverData [2])),
-				new Vector3 (Int32.Parse (serverData [3]), Int32.Parse (serverData [4])),
-				new Vector3 (Int32.Parse (serverData [5]), Int32.Parse (serverData [6])),
-				new Vector3 (Int32.Parse (serverData [7]), Int32.Parse (serverData [8])),
-				new Vector3 (Int32.Parse (serverData [9]), Int32.Parse (serverData [10])),
-				new Vector3 (Int32.Parse (serverData [11]), Int32.Parse (serverData [12])));
-
-			Debug.Log ("Ball pos finished");
+				new Vector3 (float.Parse (serverData [1]), float.Parse (serverData [2])),
+				new Vector3 (float.Parse (serverData [3]), float.Parse (serverData [4])),
+				new Vector3 (float.Parse (serverData [5]), float.Parse (serverData [6])),
+				new Vector3 (float.Parse (serverData [7]), float.Parse (serverData [8])),
+				new Vector3 (float.Parse (serverData [9]), float.Parse (serverData [10])),
+				new Vector3 (float.Parse (serverData [11]),float.Parse (serverData [12])));
 			break;
 		case "Turn":
 			Debug.Log ("TURRRRN");
 			worldState.turn = Int32.Parse (serverData [1]);
 			gameLogic.StateMachine.SetTurn (worldState.turn);
+			break;
+		case "ChTurn":
+			gameLogic.StateMachine.YourTurn ();
 			break;
 		}
 

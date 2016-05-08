@@ -7,7 +7,6 @@ public class GameStateMachine{
 	private State mCurrentState;
 	public GameStateMachine() {
 		mCurrentState = State.START;
-		Debug.Log ("Constuctor.......");
 	}
 	public State Current(){
 		return mCurrentState;
@@ -105,6 +104,15 @@ public class GameStateMachine{
 			break;
 		case State.OK_SHOOTING:
 			mCurrentState = State.KICK_OFF;
+			Debug.Log ("New state: "+mCurrentState.ToString());
+			break;
+		}
+	}
+
+	public void YourTurn(){
+		switch (mCurrentState) {
+		case State.OPP_TURN:
+			mCurrentState = State.RESETTING;
 			Debug.Log ("New state: "+mCurrentState.ToString());
 			break;
 		}
