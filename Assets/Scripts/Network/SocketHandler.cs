@@ -13,12 +13,14 @@ public class SocketHandler {
 	const string HOST = "127.0.0.1";
 
 	OutterWorldState worldState;
+	GameLogic gameLogic;
 	private Socket _clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 	private byte[] _recieveBuffer = new byte[8142];
 
-	public SocketHandler(OutterWorldState ws){
+	public SocketHandler(OutterWorldState ws, GameLogic gl){
 		worldState = ws;
         SetupServer ();
+		gameLogic = gl;
 	}
 
   
@@ -93,13 +95,20 @@ public class SocketHandler {
 		Debug.Log (incommingEvent.Body);
 		Debug.Log (incommingEvent.Title);
 		Debug.Log (head);
-		if (head.Equals ("Ball")) {
-			worldState.update( new Vector3(Int32.Parse(serverData[1]), Int32.Parse(serverData[2])),
-				new Vector3(Int32.Parse(serverData[3]), Int32.Parse(serverData[4])),
-				new Vector3(Int32.Parse(serverData[5]), Int32.Parse(serverData[6])),
-				new Vector3(Int32.Parse(serverData[7]), Int32.Parse(serverData[8])),
-				new Vector3(Int32.Parse(serverData[9]), Int32.Parse(serverData[10])),
-				new Vector3(Int32.Parse(serverData[11]), Int32.Parse(serverData[12])));
+		switch(head) {
+		case "Ball":
+			worldState.update (new Vector3 (Int32.Parse (serverData [1]), Int32.Parse (serverData [2])),
+				new Vector3 (Int32.Parse (serverData [3]), Int32.Parse (serverData [4])),
+				new Vector3 (Int32.Parse (serverData [5]), Int32.Parse (serverData [6])),
+				new Vector3 (Int32.Parse (serverData [7]), Int32.Parse (serverData [8])),
+				new Vector3 (Int32.Parse (serverData [9]), Int32.Parse (serverData [10])),
+				new Vector3 (Int32.Parse (serverData [11]), Int32.Parse (serverData [12])));
+			break;
+		case "Turn":
+			Debug.Log ("TURRRRN");
+			worldState.turn = Int32.Parse (serverData [1]);
+			gameLogic.StateMachine.SetTurn (worldState.turn);
+			break;
 		}
 
 		//Start receiving again

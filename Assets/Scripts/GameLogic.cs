@@ -6,7 +6,7 @@ public class GameLogic : MonoBehaviour {
 	const float SEND_EVENT_DELAY = 1.0f;
 
 	public GameObject ball1,ball2,ball3,leftGoalKeeper,rightGoalKeeper;
-	public GameStateMachine StateMachine = new GameStateMachine ();
+	public GameStateMachine StateMachine = GameStateMachine.i();
 	public string ShootingBallName;
 
 	private float lastSendEventTime = 0.0f;
@@ -16,7 +16,7 @@ public class GameLogic : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		outterWorldState = new OutterWorldState ();
-		socket = new SocketHandler (outterWorldState);
+		socket = new SocketHandler (outterWorldState,this);
 	}
 
 	private void updateOppenent()
@@ -40,9 +40,6 @@ public class GameLogic : MonoBehaviour {
 			break;
 		case GameStateMachine.State.RESETTING:
             
-                leftGoalKeeper.SetActive(false);
-                rightGoalKeeper.SetActive(true);
-            
 			ball1.transform.position = Vector2.MoveTowards (ball1.transform.position, ResetPoints.i ().pos1, RESET_SPEED * Time.deltaTime);
 			ball2.transform.position = Vector2.MoveTowards (ball2.transform.position, ResetPoints.i ().pos2, RESET_SPEED * Time.deltaTime);
 			ball3.transform.position = Vector2.MoveTowards (ball3.transform.position, ResetPoints.i ().pos3, RESET_SPEED * Time.deltaTime);
@@ -51,12 +48,13 @@ public class GameLogic : MonoBehaviour {
 			   && (ball3.transform.position - ResetPoints.i ().pos3).magnitude < 0.5f)
 				StateMachine.Reach ();
 			break;
-        case GameStateMachine.State.OPP_TURN:
-                leftGoalKeeper.SetActive(true);
-                rightGoalKeeper.SetActive(false);
-                break;
-
 		}
+
+		rightGoalKeeper.SetActive (StateMachine.Current() == GameStateMachine.State.OPP_TURN);
+		Debug.Log (StateMachine.Current ());
+		leftGoalKeeper.SetActive (StateMachine.Current() != GameStateMachine.State.START && StateMachine.Current() != GameStateMachine.State.OPP_TURN);
+			
+
 		if (!checkBallMoving ())
 			StateMachine.Stop ();
 

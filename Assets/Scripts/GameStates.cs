@@ -3,10 +3,34 @@ using UnityEngine;
 
 
 public class GameStateMachine{
-	private State mCurrentState = State.RESETTING;
-   // private State mCurrentState = State.OPP_TURN;
+	static public GameStateMachine instance = null;
+	private State mCurrentState;
+	public GameStateMachine() {
+		mCurrentState = State.START;
+		Debug.Log ("Constuctor.......");
+	}
 	public State Current(){
 		return mCurrentState;
+	}
+
+	public static GameStateMachine i(){
+		if (instance == null)
+			instance = new GameStateMachine ();
+		return instance;
+	}
+		
+	public void SetTurn(int turn){
+		switch (mCurrentState) {
+		case State.START:
+			if (turn == 1) {
+				Debug.Log ("Your turn");
+				mCurrentState = State.RESETTING;
+			} else {
+				Debug.Log ("Opp turn");
+				mCurrentState = State.OPP_TURN;
+			}
+			break;
+		}
 	}
 
 	public void Drag(){
@@ -85,10 +109,9 @@ public class GameStateMachine{
 			break;
 		}
 	}
-
-    
-
-	public enum State{
+		
+	public enum State {
+		START,
 		RESETTING,
 		KICK_OFF,
 		DRAGGING,

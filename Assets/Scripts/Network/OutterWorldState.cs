@@ -10,6 +10,7 @@ public class OutterWorldState {
 
 	public Vector3 ball1Pos, ball2Pos, ball3Pos;
 	public Vector3 ball1Vel, ball2Vel, ball3Vel;
+	public int turn;
 
 	public void Read(){
 		readyToRead = false;
