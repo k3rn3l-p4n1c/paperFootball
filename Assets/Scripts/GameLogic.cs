@@ -17,6 +17,7 @@ public class GameLogic : MonoBehaviour {
 	void Start () {
 		outterWorldState = new OutterWorldState ();
 		socket = new SocketHandler (outterWorldState,this);
+		Debug.Log ("Start in game logic");
 	}
 
 	private void updateOppenent()
@@ -50,9 +51,8 @@ public class GameLogic : MonoBehaviour {
 			break;
 		}
 
-		rightGoalKeeper.SetActive (StateMachine.Current() == GameStateMachine.State.OPP_TURN);
-		Debug.Log (StateMachine.Current ());
-		leftGoalKeeper.SetActive (StateMachine.Current() != GameStateMachine.State.START && StateMachine.Current() != GameStateMachine.State.OPP_TURN);
+		leftGoalKeeper.SetActive (StateMachine.Current() == GameStateMachine.State.OPP_TURN);
+		rightGoalKeeper.SetActive (StateMachine.Current() != GameStateMachine.State.START && StateMachine.Current() != GameStateMachine.State.OPP_TURN);
 			
 
 		if (!checkBallMoving ())
