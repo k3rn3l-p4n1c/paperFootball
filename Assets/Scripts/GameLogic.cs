@@ -57,7 +57,7 @@ public class GameLogic : MonoBehaviour {
 
 		if (!checkBallMoving ()) {
 			if (StateMachine.Current () == GameStateMachine.State.SHOOTING) {
-				socket.Send ("ChTurn", "");
+				socket.Send (outterWorldState.turn.ToString(), "ChTurn");
 			}
 			StateMachine.Stop ();
 		}
