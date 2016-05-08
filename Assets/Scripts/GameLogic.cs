@@ -3,7 +3,7 @@ using System.Collections;
 
 public class GameLogic : MonoBehaviour {
 	const int RESET_SPEED = 6;
-	const float SEND_EVENT_DELAY = 1.0f;
+	const float SEND_EVENT_DELAY = 0.0f;
 
 	public GameObject ball1,ball2,ball3,leftGoalKeeper,rightGoalKeeper;
 	public GameStateMachine StateMachine = GameStateMachine.i();
