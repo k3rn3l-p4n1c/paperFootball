@@ -18,7 +18,7 @@ public class GameLogic : MonoBehaviour {
 	void Start () {
         rest = GameObject.Find("WS_Client").GetComponent<RestClient>();
         Debug.Log("Before START");
-        rest.GetData();
+       // rest.GetData();
        // rest.sendUserName("koosha");
      
 		
