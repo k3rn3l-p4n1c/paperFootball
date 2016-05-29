@@ -20,14 +20,14 @@ public class OutterWorldState {
 		return readyToRead;
 	}
 
-	public void update(Vector3 ball1Pos,Vector3  ball1Vell,Vector3 ball2Pos,Vector3  ball2Vell,Vector3 ball3Pos,Vector3  ball3Vell){
+	public void update(Vector3 _ball1Pos,Vector3  _ball1Vel,Vector3 _ball2Pos,Vector3  _ball2Vel,Vector3 _ball3Pos,Vector3  _ball3Vel){
 		Debug.Log ("Ball pos updated");
-		this.ball1Pos = ball1Pos;
-		this.ball2Pos = ball2Pos;
-		this.ball3Pos = ball3Pos;
-		this.ball1Vel = ball1Vel;
-		this.ball2Vel = ball2Vel;
-		this.ball3Vel = ball3Vel;
+		this.ball1Pos = _ball1Pos;
+		this.ball2Pos = _ball2Pos;
+		this.ball3Pos = _ball3Pos;
+		this.ball1Vel = _ball1Vel;
+		this.ball2Vel = _ball2Vel;
+		this.ball3Vel = _ball3Vel;
 		readyToRead = true;
 	}
 }
