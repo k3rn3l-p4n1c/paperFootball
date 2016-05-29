@@ -3,7 +3,7 @@ using System.Collections;
 
 public class GameLogic : MonoBehaviour {
 	const int RESET_SPEED = 6;
-	const float SEND_EVENT_DELAY = 0.0f;
+	const float SEND_EVENT_DELAY = 0.1f;
 
 	public GameObject ball1,ball2,ball3,leftGoalKeeper,rightGoalKeeper;
 	public GameStateMachine StateMachine = GameStateMachine.i();
@@ -19,7 +19,7 @@ public class GameLogic : MonoBehaviour {
         rest = GameObject.Find("WS_Client").GetComponent<RestClient>();
         Debug.Log("Before START");
         rest.GetData();
-		outterWorldState = new OutterWorldState ();
+		outterWorldState = OutterWorldState.i();
 		socket = new SocketHandler (outterWorldState,this);
 	}
 
@@ -77,8 +77,9 @@ public class GameLogic : MonoBehaviour {
 		}
 		// receive from server
 		else{
-			//if (outterWorldState.IsReady () ) 
-				//updateOppenent ();
+			if (outterWorldState.IsReady ()) {
+				updateOppenent ();
+			}
 		}
         
 		//Debug.Log (checkBallMoving ());

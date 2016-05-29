@@ -13,6 +13,8 @@ public class SocketHandler {
 
 	const string HOST = "127.0.0.1";
 
+	static public SocketHandler instance = null;
+
 	OutterWorldState worldState;
 	GameLogic gameLogic;
 	bool connected = false;
@@ -31,6 +33,7 @@ public class SocketHandler {
 		Debug.Log (ws.ToString ());
 		ThreadStart ts = new ThreadStart (this.SetupServer);
 		thread = new Thread (ts);
+		instance = this;
 		thread.Start ();
 	}
 
@@ -150,27 +153,28 @@ public class SocketHandler {
 		BasicEvent incommingEvent = EventWrapper.Deserialize (recData).BasicEvent;
 		string[] serverData = incommingEvent.Body.Split(' ');
 		string head = serverData [0].Trim ();
-		Debug.Log (incommingEvent.Title + " - " + worldState.turn);
-		Debug.Log (head);
-		Debug.Log (worldState.ToString ());
-		switch(head) {
-		case "Ball":
-			worldState.update (
-				new Vector3 (-float.Parse (serverData [1]), -float.Parse (serverData [2])),
-				new Vector3 (-float.Parse (serverData [3]), -float.Parse (serverData [4])),
-				new Vector3 (-float.Parse (serverData [5]), -float.Parse (serverData [6])),
-				new Vector3 (-float.Parse (serverData [7]), -float.Parse (serverData [8])),
-				new Vector3 (-float.Parse (serverData [9]), -float.Parse (serverData [10])),
-				new Vector3 (-float.Parse (serverData [11]),-float.Parse (serverData [12])));
-			break;
-		case "Turn":
-			worldState.turn = Int32.Parse (serverData [1]);
-			Debug.Log ("TURRRRN: "+worldState.turn.ToString());
-			gameLogic.StateMachine.SetTurn (worldState.turn);
-			break;
-		case "ChTurn":
-			gameLogic.StateMachine.YourTurn ();
-			break;
+		//Debug.Log (incommingEvent.Title + " - " + worldState.turn);
+
+		if (incommingEvent.Title != worldState.turn.ToString ()) {
+			switch (head) {
+			case "Ball":
+				worldState.update (
+					new Vector3 (-float.Parse (serverData [1]), -float.Parse (serverData [2])),
+					new Vector3 (-float.Parse (serverData [3]), -float.Parse (serverData [4])),
+					new Vector3 (-float.Parse (serverData [5]), -float.Parse (serverData [6])),
+					new Vector3 (-float.Parse (serverData [7]), -float.Parse (serverData [8])),
+					new Vector3 (-float.Parse (serverData [9]), -float.Parse (serverData [10])),
+					new Vector3 (-float.Parse (serverData [11]), -float.Parse (serverData [12])));
+				break;
+			case "Turn":
+				worldState.turn = Int32.Parse (serverData [1]);
+				Debug.Log ("TURRRRN: " + worldState.turn.ToString ());
+				gameLogic.StateMachine.SetTurn (worldState.turn);
+				break;
+			case "ChTurn":
+				gameLogic.StateMachine.YourTurn ();
+				break;
+			}
 		}
 
 		//Start receiving again
