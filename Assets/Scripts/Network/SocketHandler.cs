@@ -164,8 +164,8 @@ public class SocketHandler {
 				new Vector3 (-float.Parse (serverData [11]),-float.Parse (serverData [12])));
 			break;
 		case "Turn":
-			Debug.Log ("TURRRRN");
 			worldState.turn = Int32.Parse (serverData [1]);
+			Debug.Log ("TURRRRN: "+worldState.turn.ToString());
 			gameLogic.StateMachine.SetTurn (worldState.turn);
 			break;
 		case "ChTurn":

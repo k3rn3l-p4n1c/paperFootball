@@ -19,13 +19,8 @@ public class GameLogic : MonoBehaviour {
         rest = GameObject.Find("WS_Client").GetComponent<RestClient>();
         Debug.Log("Before START");
         rest.GetData();
-       // rest.sendUserName("koosha");
-     
-		
-        StateMachine.SetTurn(1);
-
-        
-        
+		outterWorldState = new OutterWorldState ();
+		socket = new SocketHandler (outterWorldState,this);
 	}
 
 	private void updateOppenent()
@@ -65,7 +60,7 @@ public class GameLogic : MonoBehaviour {
 
 		if (!checkBallMoving ()) {
 			if (StateMachine.Current () == GameStateMachine.State.SHOOTING) {
-				//socket.Send (outterWorldState.turn.ToString(), "ChTurn");
+				socket.Send (outterWorldState.turn.ToString(), "ChTurn");
 			}
 			StateMachine.Stop ();
 		}
@@ -74,10 +69,10 @@ public class GameLogic : MonoBehaviour {
 		if (StateMachine.Current () != GameStateMachine.State.OPP_TURN) {
 			if (Time.time > lastSendEventTime + SEND_EVENT_DELAY) {
 				lastSendEventTime = Time.time;
-				//socket.Send (outterWorldState.turn.ToString() ,string.Format("Ball {0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10} {11}"
-					//,ball1.transform.position.x,ball1.transform.position.y, ball1.GetComponent<Rigidbody2D>().velocity.x,ball1.GetComponent<Rigidbody2D>().velocity.y
-					//,ball2.transform.position.x,ball2.transform.position.y, ball2.GetComponent<Rigidbody2D>().velocity.x,ball2.GetComponent<Rigidbody2D>().velocity.y
-					//,ball3.transform.position.x,ball3.transform.position.y, ball3.GetComponent<Rigidbody2D>().velocity.x,ball3.GetComponent<Rigidbody2D>().velocity.y));
+				socket.Send (outterWorldState.turn.ToString() ,string.Format("Ball {0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10} {11}"
+					,ball1.transform.position.x,ball1.transform.position.y, ball1.GetComponent<Rigidbody2D>().velocity.x,ball1.GetComponent<Rigidbody2D>().velocity.y
+					,ball2.transform.position.x,ball2.transform.position.y, ball2.GetComponent<Rigidbody2D>().velocity.x,ball2.GetComponent<Rigidbody2D>().velocity.y
+					,ball3.transform.position.x,ball3.transform.position.y, ball3.GetComponent<Rigidbody2D>().velocity.x,ball3.GetComponent<Rigidbody2D>().velocity.y));
 			} 
 		}
 		// receive from server
