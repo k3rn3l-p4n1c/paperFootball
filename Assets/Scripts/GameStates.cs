@@ -6,7 +6,7 @@ public class GameStateMachine{
 	static public GameStateMachine instance = null;
 	private State mCurrentState;
 	public GameStateMachine() {
-		mCurrentState = State.RESETTING;
+		mCurrentState = State.START;
 	}
 	public State Current(){
 		return mCurrentState;
@@ -19,7 +19,6 @@ public class GameStateMachine{
 	}
 		
 	public void SetTurn(int turn){
-        turn = 1;
 		switch (mCurrentState) {
 		case State.START:
 			if (turn == 1) {
@@ -82,7 +81,7 @@ public class GameStateMachine{
 	public void Goal(){
 		switch(mCurrentState){
 		case State.OK_SHOOTING:
-			mCurrentState = State.RESETTING;
+			mCurrentState = State.OPP_TURN;
 			Debug.Log ("New state: "+mCurrentState.ToString());
 			break;
 		}

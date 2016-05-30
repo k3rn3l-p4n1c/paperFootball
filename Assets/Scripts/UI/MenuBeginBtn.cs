@@ -36,8 +36,6 @@ public class MenuBeginBtn : MonoBehaviour {
 
         rest = GameObject.Find("GameObject").GetComponent<RestClient>();
         rest.sendUsernameReq(userID);
-
-        //SceneManager.LoadScene("League");
               
     }
 

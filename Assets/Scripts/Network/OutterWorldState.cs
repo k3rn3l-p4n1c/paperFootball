@@ -6,6 +6,17 @@ using System.Collections;
  * Server By Socket
  */
 public class OutterWorldState {
+
+	static private OutterWorldState instance = null;
+	private OutterWorldState() {
+	}
+
+	static public OutterWorldState i(){
+		if(OutterWorldState.instance == null)
+			instance = new OutterWorldState();
+		return instance;
+	}
+
 	private bool readyToRead = false;
 
 	public Vector3 ball1Pos, ball2Pos, ball3Pos;
@@ -21,7 +32,6 @@ public class OutterWorldState {
 	}
 
 	public void update(Vector3 _ball1Pos,Vector3  _ball1Vel,Vector3 _ball2Pos,Vector3  _ball2Vel,Vector3 _ball3Pos,Vector3  _ball3Vel){
-		Debug.Log ("Ball pos updated");
 		this.ball1Pos = _ball1Pos;
 		this.ball2Pos = _ball2Pos;
 		this.ball3Pos = _ball3Pos;
