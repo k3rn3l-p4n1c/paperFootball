@@ -22,9 +22,7 @@ public class BallLogic : MonoBehaviour {
 	void Update () {
 		if (goalRight.GetComponent<Renderer> ().bounds.Contains (new Vector3 (transform.position.x, transform.position.y, 0))) {
 			gameLogic.StateMachine.Goal ();
-			if (StateMachine.Current () == GameStateMachine.State.SHOOTING) {
-				SocketHandler.instance.Send (OutterWorldState.i().turn.ToString(), "ChTurn");
-			}
+			SocketHandler.instance.Send (OutterWorldState.i().turn.ToString(), "ChTurn");
 		}
 		if (rb.velocity.magnitude > 0.001)
 			gameLogic.StateMachine.Move ();

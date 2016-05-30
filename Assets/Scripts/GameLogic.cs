@@ -25,7 +25,6 @@ public class GameLogic : MonoBehaviour {
 
 	private void updateOppenent()
     {
-		Debug.Log ("Debug");
 		outterWorldState.Read ();
 		ball1.transform.position = outterWorldState.ball1Pos;
 		ball1.GetComponent<Rigidbody2D>().velocity = outterWorldState.ball1Vel;
