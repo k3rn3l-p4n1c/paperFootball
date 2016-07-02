@@ -12,6 +12,7 @@ public class RestClient : MonoBehaviour
 {
 
     string Url;
+	string serverIP;
     public static string userNameState=null;
     public  string leagueBasicState=null;
     public  string leageSemiProState = null;
@@ -28,7 +29,7 @@ public class RestClient : MonoBehaviour
     public static string allPalyerNumber = null;
     void Start()
     {
-       
+		serverIP = "http://172.20.10.3:5000";
        // GetData();
     }
 
@@ -41,7 +42,7 @@ public class RestClient : MonoBehaviour
     public void sendUsernameReq(string username)
     {
 
-        Url = "http://192.168.1.2:5000/sendUserName";
+		Url = serverIP+"/sendUserName";
         WWWForm form = new WWWForm();
         form.AddField("username", username);
         //sending the request to url
@@ -74,7 +75,7 @@ public class RestClient : MonoBehaviour
 
     public void GetOpenLeags(string username)
     {
-        Url = "http://192.168.1.2:5000/getOpenLeagues?username="+username;
+		Url = serverIP+"/getOpenLeagues?username="+username;
 
         WWW www = new WWW(Url);
         Debug.Log("Befor Sending Req");
@@ -109,7 +110,7 @@ public class RestClient : MonoBehaviour
 
     public void GetUserInfo(string username)
     {
-        Url = "http://192.168.1.2:5000/getUserInfo?username=" + username;
+		Url = serverIP+"/getUserInfo?username=" + username;
 
         WWW www = new WWW(Url);
         Debug.Log("Befor Sending Req");
@@ -141,7 +142,7 @@ public class RestClient : MonoBehaviour
 
     public void GetEnemyInfo()
     {
-        Url = "http://192.168.1.2:5000/getEnemyInfo";
+		Url = serverIP+"/getEnemyInfo";
 
         WWW www = new WWW(Url);
         Debug.Log("Befor Sending Req");
@@ -174,7 +175,7 @@ public class RestClient : MonoBehaviour
 
     public void GetLeaderBoardInfo(string username)
     {
-        Url = "http://  hossein/getLeaderBoardInfo?username="+username;
+		Url = serverIP+"/getLeaderBoardInfo?username="+username;
 
         WWW www = new WWW(Url);
         Debug.Log("Befor Sending Req");

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Abrio;
 
 public class BallLogic : MonoBehaviour {
 
@@ -23,7 +24,7 @@ public class BallLogic : MonoBehaviour {
 		if (goalRight.GetComponent<Renderer> ().bounds.Contains (new Vector3 (transform.position.x, transform.position.y, 0))) {
 			gameLogic.StateMachine.Goal ();
 			if (StateMachine.Current () == GameStateMachine.State.SHOOTING) {
-				SocketHandler.instance.Send (OutterWorldState.i().turn.ToString(), "ChTurn");
+				AbrioClient.instance.Send (OutterWorldState.i().turn.ToString(), "ChTurn");
 			}
 		}
 		if (rb.velocity.magnitude > 0.001)

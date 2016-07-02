@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Abrio;
 
 public class GameLogic : MonoBehaviour {
 	const int RESET_SPEED = 6;
@@ -11,7 +12,8 @@ public class GameLogic : MonoBehaviour {
 
 	private float lastSendEventTime = 0.0f;
 	private OutterWorldState outterWorldState;
-	private SocketHandler socket;
+	private AbrioClient socket;
+	private SocketHandler handler;
     private RestClient rest;
     
 	// Use this for initialization
@@ -20,8 +22,9 @@ public class GameLogic : MonoBehaviour {
         Debug.Log("Before START");
       //  StateMachine.SetTurn(1);
         outterWorldState = OutterWorldState.i();
-		socket = new SocketHandler (outterWorldState,this);
-
+		handler = new SocketHandler (outterWorldState, this);
+		socket = new AbrioClient (handler);
+		socket.Start ();
 	}
 
 	private void updateOppenent()

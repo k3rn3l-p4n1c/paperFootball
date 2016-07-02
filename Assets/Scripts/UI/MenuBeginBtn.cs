@@ -15,7 +15,7 @@ public class MenuBeginBtn : MonoBehaviour {
     }
     void Update()
     {
-        if (RestClient.userNameState != null)
+		if (RestClient.userNameState != null && RestClient.userNameState !="fail" )
         {
             SceneManager.LoadScene("League");
         }
