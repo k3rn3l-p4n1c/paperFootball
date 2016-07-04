@@ -92,7 +92,10 @@ namespace Abrio
 
 				state = AbrioState.CONNECTED;
 				retryCount = 0;
-				handler.onConnected();
+				//handler.onConnected();
+				_clientSocket.BeginReceive(buffer, 0, 2, SocketFlags.None, new AsyncCallback(ReceiveFrameCallback), null);
+				Debug.Log("Starting listening");
+
 			} catch (SocketException ex) {
 				Debug.Log ("Fail to connect: " + ex.Message + ex.StackTrace);
 				reconnect ();
@@ -147,9 +150,11 @@ namespace Abrio
 		private void ReceiveFrameCallback (IAsyncResult AR)
 		{
 			int recieved = _clientSocket.EndReceive (AR);
-
-			if (recieved != 2)
+			Debug.Log ("Frame came");
+			if (recieved != 2) {
+				Debug.Log ("wrong frame size");
 				return;
+			}
 
 			int size = ((int)(buffer [0]) << 4) + (int)(buffer [1]);
 			_clientSocket.BeginReceive (buffer, 0, size, SocketFlags.None, new AsyncCallback (ReceiveCallback), null);
@@ -168,6 +173,7 @@ namespace Abrio
 			byte[] recData = new byte[recieved];
 			Buffer.BlockCopy (buffer, 0, recData, 0, recieved);
 
+			Debug.Log ("fuuuck");
 			handler.onBasicEvent (EventWrapper.Deserialize (recData).BasicEvent);
 
 			//Start receiving again

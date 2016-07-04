@@ -30,7 +30,7 @@ public class SocketHandler: IAbrioHandler
 		string[] serverData = abrioEvent.Body.Split(' ');
 		string head = serverData[0].Trim();
 		//Debug.Log (incommingEvent.Title + " - " + worldState.turn);
-
+		Debug.Log(abrioEvent.Title);
 		if (abrioEvent.Title != worldState.turn.ToString())
 		{
 			switch (head)
