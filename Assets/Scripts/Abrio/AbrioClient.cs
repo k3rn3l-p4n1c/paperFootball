@@ -10,7 +10,7 @@ namespace Abrio
 	{
 		// Constants
 //		const string HOST = "198.72.109.14";
-		const string HOST = "127.0.0.1";
+		const string HOST = "172.20.10.5";
 		const int PORT = 8000;
 
 		[ThreadStatic]

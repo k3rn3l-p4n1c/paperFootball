@@ -3,6 +3,8 @@ using UnityEngine;
 
 
 public class GameStateMachine{
+
+
 	static public GameStateMachine instance = null;
 	private State mCurrentState;
 	public GameStateMachine() {
