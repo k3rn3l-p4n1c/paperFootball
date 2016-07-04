@@ -39,25 +39,10 @@ public class BallLogic : MonoBehaviour
 
 		}
 
-		//StateMachine.Current () == GameStateMachine.State.DRAGGING ||
+		//
 		if (gameLogic.ShootingBallName == name) {
-			if (StateMachine.Current () == GameStateMachine.State.START) {
-				//float h = horizontalSpeed * Camera.main.ScreenToWorldPoint (Input.mousePosition).x * Time.deltaTime;
-				//float v = verticalSpeed * Camera.main.ScreenToWorldPoint (Input.mousePosition).y * Time.deltaTime;
-				//Debug.Log ("h:" + h.ToString ());
-				//Debug.Log ("v:" + v.ToString ());
-				//Vector3 forArrow = new Vector3 (v, h, 0);
-				//float nz = verticalSpeed*Camera.main.ScreenToWorldPoint (Input.mousePosition).z * Time.deltaTime;
-				//Vector3 forArrow = new Vector3 (0, 0, nz);
-				//arrow.transform.localRotation = Quaternion.Euler (forArrow);
-
-				//Vector3 mousePos = Input.mousePosition;
-				//mousePos.z = -(arrow.transform.position.x - Camera.main.transform.position.x);
-				//mousePos.x = 0;
-				//mousePos.y = 0;
-
-				//Vector3 worldPos = Camera.main.ScreenToWorldPoint(mousePos);
-				//arrow.transform.LookAt (worldPos);
+			if (StateMachine.Current () == GameStateMachine.State.DRAGGING) {
+				
 
 				Vector3 mousePos = Input.mousePosition;
 				mousePos.z = 5.23f;
