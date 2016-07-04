@@ -78,7 +78,7 @@ namespace Abrio
 					Debug.Log ("Connected successfully");
 
 				AuthEvent authEvent = new AuthEvent ();
-				authEvent.DeviceId = "koosha";
+				authEvent.DeviceId = "bardia";
 				authEvent.UserId = "bardia";
 				authEvent.PrivateKey = "0212526";
 
@@ -125,6 +125,7 @@ namespace Abrio
 
 		private bool TrySendData (byte[] data)
 		{
+			Debug.Log("Send data");
 			try {
 				int len = data.Length;
 				byte[] data_with_header = new byte[len + 2];

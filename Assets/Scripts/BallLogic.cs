@@ -23,10 +23,7 @@ public class BallLogic : MonoBehaviour {
 	void Update () {
 		if (goalRight.GetComponent<Renderer> ().bounds.Contains (new Vector3 (transform.position.x, transform.position.y, 0))) {
 			gameLogic.StateMachine.Goal ();
-
-			if (StateMachine.Current () == GameStateMachine.State.SHOOTING) {
-				AbrioClient.instance.Send (OutterWorldState.i().turn.ToString(), "ChTurn");
-			}
+			AbrioClient.instance.Send (OutterWorldState.i().turn.ToString(), "ChTurn");
 		}
 		if (rb.velocity.magnitude > 0.001)
 			gameLogic.StateMachine.Move ();
@@ -42,6 +39,7 @@ public class BallLogic : MonoBehaviour {
 		switch (gameLogic.StateMachine.Current()) {
 		case GameStateMachine.State.DRAGGING:
 			Vector2 shoot = new Vector2 ();
+
 			shoot.x = rb.position.x - Camera.main.ScreenToWorldPoint (Input.mousePosition).x;
 			shoot.y = rb.position.y - Camera.main.ScreenToWorldPoint (Input.mousePosition).y;
 

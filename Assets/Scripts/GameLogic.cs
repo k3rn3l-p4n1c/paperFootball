@@ -69,7 +69,10 @@ public class GameLogic : MonoBehaviour {
 		}
 
 		//send to server
-		if (StateMachine.Current () != GameStateMachine.State.OPP_TURN) {
+		if (StateMachine.Current () == GameStateMachine.State.DRAGGING ||
+			StateMachine.Current () == GameStateMachine.State.SHOOTING ||
+			StateMachine.Current () == GameStateMachine.State.OK_SHOOTING ||
+			StateMachine.Current () == GameStateMachine.State.RESETTING) {
 			if (Time.time > lastSendEventTime + SEND_EVENT_DELAY) {
 				lastSendEventTime = Time.time;
 				socket.Send (outterWorldState.turn.ToString() ,string.Format("Ball {0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10} {11}"

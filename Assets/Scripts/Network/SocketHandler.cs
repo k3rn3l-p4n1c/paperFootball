@@ -52,6 +52,11 @@ public class SocketHandler: IAbrioHandler
 			case "ChTurn":
 				gameLogic.StateMachine.YourTurn();
 				break;
+			default:
+				Debug.Log ("invalid msg from server");
+				Debug.Log (abrioEvent.Title);
+				Debug.Log (abrioEvent.Body);
+				break;
 			}
 		}
 	}
