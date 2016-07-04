@@ -30,7 +30,7 @@ public class SocketHandler: IAbrioHandler
 		string[] serverData = abrioEvent.Body.Split(' ');
 		string head = serverData[0].Trim();
 		//Debug.Log (incommingEvent.Title + " - " + worldState.turn);
-
+		Debug.Log(abrioEvent.Title);
 		if (abrioEvent.Title != worldState.turn.ToString())
 		{
 			switch (head)
@@ -51,6 +51,11 @@ public class SocketHandler: IAbrioHandler
 				break;
 			case "ChTurn":
 				gameLogic.StateMachine.YourTurn();
+				break;
+			default:
+				Debug.Log ("invalid msg from server");
+				Debug.Log (abrioEvent.Title);
+				Debug.Log (abrioEvent.Body);
 				break;
 			}
 		}
